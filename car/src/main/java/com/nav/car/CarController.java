@@ -28,11 +28,11 @@ public class CarController {
         return "index";
     }
 
-    @GetMapping("/create")
-    public String create(Model model){
+    @GetMapping("/add")
+    public String add(Model model){
         com.nav.car.Car car = new com.nav.car.Car();
         model.addAttribute("car",car);
-        return "create";
+        return "add";
     }
 
     @PostMapping("/save")

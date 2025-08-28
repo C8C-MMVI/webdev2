@@ -1,0 +1,44 @@
+package com.nav.car;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
+
+@Controller
+public class CarController {
+
+    CarRepository carRepository;
+
+    public CarController(CarRepository carRepository) {
+        this.carRepository = carRepository;
+    }
+
+    @GetMapping("/")
+    public String index(Model model){
+        List<com.nav.car.Car> cars = carRepository.findAll();
+        model.addAttribute("cars",carRepository.findAll());
+        cars.forEach(car -> {
+            System.out.println(car.getMake());
+        });
+        return "index";
+    }
+
+    @GetMapping("/create")
+    public String create(Model model){
+        com.nav.car.Car car = new com.nav.car.Car();
+        model.addAttribute("car",car);
+        return "create";
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute com.nav.car.Car car){
+        carRepository.save(car);
+        return "redirect:/";
+
+    }
+}

@@ -12,21 +12,19 @@
 <table>
   <thead>
   <tr>
-    <th>ID</th><th>License</th><th>Make</th><th>Model</th><th>Year</th>
-    <th>Color</th><th>Body Type</th><th>Engine</th><th>Transmission</th>
+    <th>Make</th>
+    <th>Model</th>
+    <th>Year</th>
+    <th>Color</th>
   </tr>
   </thead>
   <tbody>
-  <tr th:each="car : ${cars}">
-    <td th:text="${car.carID}"></td>
-    <td th:text="${car.licensePlateNumber}"></td>
+  <tr th:each="car: ${cars}">
     <td th:text="${car.make}"></td>
     <td th:text="${car.model}"></td>
     <td th:text="${car.year}"></td>
     <td th:text="${car.color}"></td>
-    <td th:text="${car.bodyType}"></td>
-    <td th:text="${car.engineType}"></td>
-    <td th:text="${car.transmission}"></td>
+
   </tr>
   </tbody>
 </table>

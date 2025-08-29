@@ -9,7 +9,7 @@
 <h1>Car List</h1>
 <div class="nav-links">
 <a href="/add">Add New Car</a>
-<a href="/about">About</a>
+<a href="#">About</a>
 </div>
 <table>
   <thead>
@@ -18,6 +18,10 @@
     <th>Model</th>
     <th>Year</th>
     <th>Color</th>
+    <th>Body Type</th>
+    <th>Engine Type</th>
+    <th>License Plate</th>
+    <th>Options</th>
   </tr>
   </thead>
   <tbody>
@@ -26,7 +30,13 @@
     <td th:text="${car.model}"></td>
     <td th:text="${car.year}"></td>
     <td th:text="${car.color}"></td>
-
+    <td th:text="${car.bodyType}"></td>
+    <td th:text="${car.engineType}"></td>
+    <td th:text="${car.licensePlate}"></td>
+    <td class="actions">
+      <a th:href="@{/update(id=${car.id})}">Update</a>
+      <a th:href = "@{/delete(id=${car.id})}">Delete</a>
+    </td>
   </tr>
   </tbody>
 </table>

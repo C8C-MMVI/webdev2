@@ -13,7 +13,13 @@
     <input type="text" th:field="*{model}" placeholder="Model">
     <input type="number" th:field="*{year}" placeholder="Year">
     <input type="text" th:field="*{color}" placeholder="Color">
-    <button class = "button-container">Save</button>
+    <input type="text" th:field="*{bodyType}" placeholder="Body Type">
+    <input type="text" th:field="*{engineType}" placeholder="Engine Type">
+    <input type="text" th:field="*{licensePlate}" placeholder="License Plate (e.g., AXL-0984)">
+    <div class="button-container">
+        <button>Save</button>
+        <a href="/">Back to List</a>
+    </div>
 </form>
 </body>
 </html>

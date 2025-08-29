@@ -1,6 +1,5 @@
 package com.nav.car;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +38,17 @@ public class CarController {
     public String save(@ModelAttribute com.nav.car.Car car){
         carRepository.save(car);
         return "redirect:/";
+    }
 
+    @PostMapping("/update")
+    public String updateCar(@ModelAttribute com.nav.car.Car car){
+        carRepository.save(car);
+        return "redirect:/";
+    }
+
+    @GetMapping("/delete")
+    public String delete(@ModelAttribute com.nav.car.Car car){
+        carRepository.delete(car);
+        return "redirect:/";
     }
 }

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.thymeleaf.org ">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Add Car</title>
-  <link th:href="@{add.css}" rel="stylesheet">
+  <title>Update Car</title>
+  <link th:href="@{/add.css}" rel="stylesheet">
 </head>
 <body>
-<h1 th:text="'Update ' + ${car.name}"></h1>
-<form action="/update" method="post" th:object="${car}">
+<h1>Update Car</h1>
+<form th:action="@{/update}" method="post" th:object="${car}">
+  <input type="hidden" th:field="*{id}">
   <input type="text" th:field="*{make}" placeholder="Make">
   <input type="text" th:field="*{model}" placeholder="Model">
   <input type="number" th:field="*{year}" placeholder="Year">
@@ -17,8 +17,8 @@
   <input type="text" th:field="*{engineType}" placeholder="Engine Type">
   <input type="text" th:field="*{licensePlate}" placeholder="License Plate (e.g., AXL-0984)">
   <div class="button-container">
-    <button>Save</button>
-    <a href="/">Back to List</a>
+    <button type="submit">Update Car</button>
+    <a th:href="@{/}">Back to List</a>
   </div>
 </form>
 </body>

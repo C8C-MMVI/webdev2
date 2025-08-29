@@ -34,7 +34,7 @@
     <td th:text="${car.engineType}"></td>
     <td th:text="${car.licensePlate}"></td>
     <td class="actions">
-<!--      <a th:href="@{/update(id=${car.id})}">Update</a>-->
+      <a th:href="@{/edit(id=${car.id})}">Update</a>
       <a th:href = "@{/delete(id=${car.id})}">Delete</a>
     </td>
   </tr>

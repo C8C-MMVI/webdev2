@@ -40,8 +40,13 @@ public class CarController {
         return "redirect:/";
     }
 
+    @GetMapping("/edit")
+    public String edit(@ModelAttribute com.nav.car.Car car){
+        return "update";
+    }
+
     @PostMapping("/update")
-    public String updateCar(@ModelAttribute com.nav.car.Car car){
+    public String update(@ModelAttribute com.nav.car.Car car){
         carRepository.save(car);
         return "redirect:/";
     }

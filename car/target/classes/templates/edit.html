@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Car</title>
+  <link th:href="@{/add.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Update Car</h1>
+<form th:action="@{/update}" method="post" th:object="${car}">
+  <input type="hidden" th:field="*{id}">
+  <input type="text" th:field="*{make}" placeholder="Make">
+  <input type="text" th:field="*{model}" placeholder="Model">
+  <input type="number" th:field="*{year}" placeholder="Year">
+  <input type="text" th:field="*{color}" placeholder="Color">
+  <input type="text" th:field="*{bodyType}" placeholder="Body Type">
+  <input type="text" th:field="*{engineType}" placeholder="Engine Type">
+  <input type="text" th:field="*{licensePlate}" placeholder="License Plate (e.g., AXL-0984)">
+  <div class="button-container">
+    <button type="submit">Update Car</button>
+    <a th:href="@{/}">Back to List</a>
+  </div>
+</form>
+</body>
+</html>

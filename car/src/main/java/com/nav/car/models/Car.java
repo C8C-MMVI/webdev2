@@ -9,10 +9,10 @@ public class Car{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotBlank(message = "Make cannot be empty")
-    @Size(min = 2, max = 50, message = "Make must be between 2–50 characters")
+//    @NotBlank(message = "Make cannot be empty")
+//    @Size(min = 2, max = 50, message = "Make must be between 2–50 characters")
     private String make;
-    @NotBlank(message = "Model cannot be empty")
+//    @NotBlank(message = "Model cannot be empty")
     private String model;
     private int year;
     private String color;

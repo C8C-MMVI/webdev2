@@ -1,5 +1,6 @@
-package com.nav.car;
+package com.nav.car.utils;
 
+import com.nav.car.repositories.CarRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

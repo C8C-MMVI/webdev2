@@ -1,11 +1,11 @@
-package com.nav.car;
+package com.nav.car.controllers;
 
+import com.nav.car.exceptions.ResourceNotFoundException;
+import com.nav.car.models.Car;
+import com.nav.car.repositories.CarRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -60,5 +60,12 @@ public class CarController {
     public String delete(@RequestParam("id") int id){
         carRepository.deleteById(id);
         return "redirect:/";
+    }
+
+    @GetMapping("/view")
+    public String view(@RequestParam("id") int id, Model model){
+        Car car = carRepository.findById(id).orElseThrow
+                (() -> new ResourceNotFoundException("Car", id));
+        return "view";
     }
 }

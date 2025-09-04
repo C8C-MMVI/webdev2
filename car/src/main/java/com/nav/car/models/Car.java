@@ -1,16 +1,18 @@
-package com.nav.car;
+package com.nav.car.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Car{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NotBlank(message = "Make cannot be empty")
+    @Size(min = 2, max = 50, message = "Make must be between 2–50 characters")
     private String make;
+    @NotBlank(message = "Model cannot be empty")
     private String model;
     private int year;
     private String color;

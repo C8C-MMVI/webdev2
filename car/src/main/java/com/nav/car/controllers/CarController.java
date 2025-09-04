@@ -1,10 +1,13 @@
 package com.nav.car.controllers;
 
+import com.nav.car.dto.CarDTO;
 import com.nav.car.exceptions.ResourceNotFoundException;
 import com.nav.car.models.Car;
 import com.nav.car.repositories.CarRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,8 +39,23 @@ public class CarController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Car car){
-        carRepository.save(car);
+    public String save(@ModelAttribute("car") @Valid CarDTO car, BindingResult result, Model model){
+        if(result.hasErrors()){
+            model.addAttribute("car",car);
+            return "add";
+        }
+
+        Car newCar = new Car();
+        newCar.setMake(car.getMake());
+        newCar.setModel(car.getModel());
+        newCar.setYear(car.getYear());
+        newCar.setColor(car.getColor());
+        newCar.setBodyType(car.getBodyType());
+        newCar.setEngineType(car.getEngineType());
+        newCar.setLicensePlate(car.getLicensePlate());
+        carRepository.save(newCar);
+
+
         return "redirect:/";
     }
 

@@ -7,19 +7,28 @@
     <link th:href="@{add.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Add New Car</h1>
-<form action="/save" method="post" th:object="${car}">
-    <input type="text" th:field="*{make}" placeholder="Make">
-    <input type="text" th:field="*{model}" placeholder="Model">
-    <input type="number" th:field="*{year}" placeholder="Year">
-    <input type="text" th:field="*{color}" placeholder="Color">
-    <input type="text" th:field="*{bodyType}" placeholder="Body Type">
-    <input type="text" th:field="*{engineType}" placeholder="Engine Type">
-    <input type="text" th:field="*{licensePlate}" placeholder="License Plate (e.g., AXL-0984)">
-    <div class="button-container">
-        <button>Save</button>
-        <a href="/">Back to List</a>
-    </div>
-</form>
+<main>
+    <h1>Add New Car</h1>
+    <form action="/save" method="post" th:object="${car}">
+        <input type="text" th:field="*{make}" placeholder="Make">
+        <div th:if="${#fields.hasErrors('make')}" th:errors="*{make}"></div>
+        <input type="text" th:field="*{model}" placeholder="Model">
+        <div th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></div>
+        <input type="number" th:field="*{year}" placeholder="Year">
+        <div th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
+        <input type="text" th:field="*{color}" placeholder="Color">
+        <div th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
+        <input type="text" th:field="*{bodyType}" placeholder="Body Type">
+        <div th:if="${#fields.hasErrors('bodyType')}" th:errors="*{bodyType}"></div>
+        <input type="text" th:field="*{engineType}" placeholder="Engine Type">
+        <div th:if="${#fields.hasErrors('engineType')}" th:errors="*{engineType}"></div>
+        <input type="text" th:field="*{licensePlate}" placeholder="License Plate (e.g., AXL-0984)">
+        <div th:if="${#fields.hasErrors('licensePlate')}" th:errors="*{licensePlate}"></div>
+        <div class="button-container">
+            <button>Save</button>
+            <a href="/">Back to List</a>
+        </div>
+    </form>
+</main>
 </body>
 </html>

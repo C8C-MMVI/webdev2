@@ -1,22 +1,28 @@
-package com.nav.car.models;
+package com.nav.car.dto;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
-@Entity
-public class Car{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
+public class CarDTO{
+    @NotBlank(message ="Make is required")
     private String make;
-    private String model;
-    private int year;
-    private String color;
-    private String bodyType;
-    private String engineType;
-    private String licensePlate;
 
-    public int getId(){return id;}
+    @NotBlank(message ="Car model is required")
+    private String model;
+
+    @Min(1900)
+    @Max(2025)
+    private int year;
+    @NotBlank(message ="Car color is required")
+    private String color;
+    @NotBlank(message ="Car body type is required")
+    private String bodyType;
+    @NotBlank(message ="Car engine type is required")
+    private String engineType;
+    @NotBlank(message ="Car's license plate is required")
+    private String licensePlate;
 
     public String getMake() {
         return make;
@@ -72,9 +78,5 @@ public class Car{
 
     public void setLicensePlate(String licensePlate) {
         this.licensePlate = licensePlate;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

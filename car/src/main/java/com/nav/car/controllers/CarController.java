@@ -68,8 +68,23 @@ public class CarController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Car car){
-        carRepository.save(car);
+    public String update(@ModelAttribute("car") @Valid CarDTO car, BindingResult result, Model model){
+        if(result.hasErrors()){
+            model.addAttribute("car",car);
+            return "add";
+        }
+
+        Car newCar = new Car();
+        newCar.setMake(car.getMake());
+        newCar.setModel(car.getModel());
+        newCar.setYear(car.getYear());
+        newCar.setColor(car.getColor());
+        newCar.setBodyType(car.getBodyType());
+        newCar.setEngineType(car.getEngineType());
+        newCar.setLicensePlate(car.getLicensePlate());
+        carRepository.save(newCar);
+
+
         return "redirect:/";
     }
 

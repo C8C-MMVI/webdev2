@@ -74,16 +74,21 @@ public class CarController {
             return "add";
         }
 
-        Car newCar = new Car();
-        newCar.setMake(car.getMake());
-        newCar.setModel(car.getModel());
-        newCar.setYear(car.getYear());
-        newCar.setColor(car.getColor());
-        newCar.setBodyType(car.getBodyType());
-        newCar.setEngineType(car.getEngineType());
-        newCar.setLicensePlate(car.getLicensePlate());
-        carRepository.save(newCar);
+        // Find the existing car by ID
+        Car existingCar = carRepository.findById(car.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Car", car.getId()));
 
+        // Update its fields
+        existingCar.setMake(car.getMake());
+        existingCar.setModel(car.getModel());
+        existingCar.setYear(car.getYear());
+        existingCar.setColor(car.getColor());
+        existingCar.setBodyType(car.getBodyType());
+        existingCar.setEngineType(car.getEngineType());
+        existingCar.setLicensePlate(car.getLicensePlate());
+
+        // Save the updated car
+        carRepository.save(existingCar);
 
         return "redirect:/";
     }

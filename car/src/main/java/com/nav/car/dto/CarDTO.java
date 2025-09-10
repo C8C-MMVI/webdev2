@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 public class CarDTO{
+
+    private int id;
+
     @NotBlank(message ="Make is required")
     private String make;
 
@@ -21,7 +24,7 @@ public class CarDTO{
     private String bodyType;
     @NotBlank(message ="Car engine type is required")
     private String engineType;
-    @NotBlank(message ="Car's license plate is required")
+    @NotBlank(message = "Car license plate is required")
     private String licensePlate;
 
     public String getMake() {
@@ -78,5 +81,13 @@ public class CarDTO{
 
     public void setLicensePlate(String licensePlate) {
         this.licensePlate = licensePlate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

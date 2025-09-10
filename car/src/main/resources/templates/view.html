@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>View</title>
 </head>
 <body>
-<h3 th:text = "${car.model}"></h3>
+<main>
+    <h1>Car details</h1>
+    <ul>
+        <li th:text="${car.make}"></li>
+        <li th:text="${car.model}"></li>
+        <li th:text="${car.year}"></li>
+    </ul>
+</main>
 </body>
 </html>

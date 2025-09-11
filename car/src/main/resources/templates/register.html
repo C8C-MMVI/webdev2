@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link th:href="@{/login.css}" rel="stylesheet">
+</head>
+<body>
+<main>
+    <h1>Register</h1>
+    <form th:action="@{/register}" method="post">
+        <!-- show error message if registration fails -->
+        <div th:if="${param.error}" class="message error-message">
+            Registration failed. Please try again.
+        </div>
+
+        <!-- show success message if needed -->
+        <div th:if="${param.success}" class="message success-message">
+            Registration successful! You can now login.
+        </div>
+
+        <label for="username">Username:
+            <input type="text" id="username" name="username"/>
+        </label>
+
+        <label for="password">Password:
+            <input type="password" id="password" name="password"/>
+        </label>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <a th:href="@{/login}">Login</a>
+</main>
+</body>
+</html>

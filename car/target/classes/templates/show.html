@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${car.getMake()} + ${car.getModel()}"></title>
+</head>
+<body>
+<h1>Car details</h1>
+<ul>
+    <li>Make: [[${car.make}]]</li>
+    <li>Model: [[${car.model}]]</li>
+    <li>Year: [[${car.year}]]</li>
+</ul>
+</body>
+</html>

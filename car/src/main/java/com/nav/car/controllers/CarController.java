@@ -100,10 +100,12 @@ public class CarController {
         return "redirect:/";
     }
 
-    @GetMapping("/view")
-    public String view(@RequestParam("id") int id, Model model){
-        Car car = carRepository.findById(id).orElseThrow
-                (() -> new ResourceNotFoundException("Car", id));
-        return "view";
+    @GetMapping("/show")
+    public String show(@RequestParam int id, Model model){
+        Car car = carRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Car", id));
+        System.out.println("reached this point");
+
+        model.addAttribute("car",car);
+        return "show";
     }
 }

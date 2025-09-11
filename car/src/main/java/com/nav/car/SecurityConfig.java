@@ -33,15 +33,21 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/register", "/css/**").permitAll()
+                        .requestMatchers("/login", "/register", "/css/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
-                        .defaultSuccessUrl("/dashboard", true)
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll());
+                .logout(logout -> logout
+                        .logoutUrl("/logout")              // endpoint for logout
+                        .logoutSuccessUrl("/login?logout") // redirect with logout param
+                        .invalidateHttpSession(true)       // clear session
+                        .clearAuthentication(true)         // clear auth
+                        .permitAll()
+                );
 
         return http.build();
     }

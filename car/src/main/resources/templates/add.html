@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Car</title>
-    <link th:href="@{/add.css}" rel="stylesheet">
+    <link th:href="@{/css/add.css}" rel="stylesheet">
 </head>
 <body>
 <main>
     <h1>Add New Car</h1>
     <form action="/save" method="post" th:object="${car}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <input type="text" th:field="*{make}" placeholder="Make">
         <div th:if="${#fields.hasErrors('make')}" th:errors="*{make}"></div>
         <input type="text" th:field="*{model}" placeholder="Model">

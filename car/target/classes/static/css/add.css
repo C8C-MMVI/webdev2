@@ -1,50 +1,38 @@
-:root {
+:root{
     --title_color: #333;
     --pad: 20px;
 }
-
-body {
+main {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: var(--pad);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f5f5f5;
-}
-
-main {
     max-width: 50%;
     margin: 0 auto;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-
 main h1 {
     color: var(--title_color);
     margin-bottom: 30px;
 }
-
 form {
     background-color: #f9f9f9;
     padding: var(--pad);
     border-radius: 8px;
     border: 1px solid #ddd;
-    width: 100%;
-    max-width: 400px;
 }
-
 label {
     display: block;
     margin-bottom: 15px;
     font-weight: bold;
     color: #555;
 }
-
-input[type="text"], input[type="password"] {
+input[type="text"],
+input[type="number"],
+select {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
@@ -53,13 +41,13 @@ input[type="text"], input[type="password"] {
     box-sizing: border-box;
     font-size: 14px;
 }
-
-input[type="text"]:focus, input[type="password"]:focus {
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
-
 .button-container {
     display: flex;
     justify-content: center;
@@ -77,9 +65,8 @@ button {
     cursor: pointer;
     font-size: 16px;
     margin-right: 10px;
-    width: 100%;
-}
 
+}
 button:hover {
     background-color: #0056b3;
 }
@@ -94,32 +81,15 @@ a {
     cursor: pointer;
     font-size: 16px;
     margin-right: 10px;
-    display: block;
-    text-align: center;
-    margin-top: 15px;
-}
 
+}
 a:hover {
     background-color: #0056b3;
 }
 
-.message {
+div{
     color: red;
     font-family: Arial, sans-serif;
     font-weight: bold;
     font-size: 10px;
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 4px;
-}
-
-.error-message {
-    background-color: #fee;
-    border: 1px solid #fcc;
-}
-
-.success-message {
-    color: green;
-    background-color: #efe;
-    border: 1px solid #cfc;
 }

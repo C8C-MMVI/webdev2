@@ -3,44 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Car List</title>
-  <link th:href="@{/style.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
 <h1>Car List</h1>
 <div class="nav-links">
-  <a href="/add">Add New Car</a>
-  <a href="#">About</a>
-  <a th:href="@{/logout}">Logout</a>
+    <a href="/add">Add New Car</a>
+    <a href="#">About</a>
+    <!-- Logout as POST form -->
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit" class="logout-btn">Logout</button>
+    </form>
 </div>
+
 <table>
-  <thead>
-  <tr>
-    <th>Make</th>
-    <th>Model</th>
-    <th>Year</th>
-    <th>Color</th>
-    <th>Body Type</th>
-    <th>Engine Type</th>
-    <th>License Plate</th>
-    <th>Options</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="car: ${cars}">
-    <td th:text="${car.make}"></td>
-    <td th:text="${car.model}"></td>
-    <td th:text="${car.year}"></td>
-    <td th:text="${car.color}"></td>
-    <td th:text="${car.bodyType}"></td>
-    <td th:text="${car.engineType}"></td>
-    <td th:text="${car.licensePlate}"></td>
-    <td class="actions">
-      <a th:href="@{/edit(id=${car.id})}">Update</a>
-      <a th:href = "@{/delete(id=${car.id})}">Delete</a>
-<!--      <a th:href = "@{/view(id=${car.id})}">View</a>-->
-    </td>
-  </tr>
-  </tbody>
+    <thead>
+    <tr>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Year</th>
+        <th>Color</th>
+        <th>Body Type</th>
+        <th>Engine Type</th>
+        <th>License Plate</th>
+        <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="car: ${cars}">
+        <td th:text="${car.make}"></td>
+        <td th:text="${car.model}"></td>
+        <td th:text="${car.year}"></td>
+        <td th:text="${car.color}"></td>
+        <td th:text="${car.bodyType}"></td>
+        <td th:text="${car.engineType}"></td>
+        <td th:text="${car.licensePlate}"></td>
+        <td class="actions">
+            <a th:href="@{/edit(id=${car.id})}">Update</a>
+            <a th:href="@{/delete(id=${car.id})}">Delete</a>
+            <!-- <a th:href="@{/view(id=${car.id})}">View</a> -->
+        </td>
+    </tr>
+    </tbody>
 </table>
 
 </body>

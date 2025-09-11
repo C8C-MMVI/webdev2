@@ -33,7 +33,7 @@ public class CarController {
 
     @GetMapping("/add")
     public String add(Model model){
-        Car car = new Car();
+        CarDTO car = new CarDTO();
         model.addAttribute("car", car);
         return "add";
     }

@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Update Car</title>
-  <link th:href="@{/add.css}" rel="stylesheet">
+  <link th:href="@{/css/add.css}" rel="stylesheet">
 </head>
 <body>
 <main>
   <h1>Update Car</h1>
   <form th:action="@{/update}" method="post" th:object="${car}">
-    <input type="hidden" th:field="*{id}">
-    <input type="text" th:field="*{make}" placeholder="Make">
-    <div th:if="${#fields.hasErrors('make')}" th:errors="*{make}"></div>
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+      <input type="hidden" th:field="*{id}">
+      <input type="text" th:field="*{make}" placeholder="Make">
+      <div th:if="${#fields.hasErrors('make')}" th:errors="*{make}"></div>
     <input type="text" th:field="*{model}" placeholder="Model">
     <div th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></div>
     <input type="number" th:field="*{year}" placeholder="Year">

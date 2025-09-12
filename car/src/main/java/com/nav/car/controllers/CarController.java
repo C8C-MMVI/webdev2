@@ -62,7 +62,8 @@ public class CarController {
     // Fixed: Use @RequestParam to get the car ID from the URL
     @GetMapping("/edit")
     public String edit(@RequestParam("id") int id, Model model){
-        Car car = carRepository.findById(id).orElse(new Car());
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Car", id));;
         model.addAttribute("car", car);
         return "edit";
     }

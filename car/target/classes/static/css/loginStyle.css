@@ -3,8 +3,11 @@
     --pad: 20px;
 }
 
-body {
+*{
     font-family: Arial, sans-serif;
+}
+
+body {
     margin: 0;
     padding: var(--pad);
     min-height: 100vh;
@@ -26,6 +29,7 @@ main {
 main h1 {
     color: var(--title_color);
     margin-bottom: 30px;
+    text-transform: uppercase;
 }
 
 form {
@@ -84,23 +88,15 @@ button:hover {
     background-color: #0056b3;
 }
 
-a {
-    text-decoration: none;
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-right: 10px;
-    display: block;
+p{
     text-align: center;
-    margin-top: 15px;
+}
+a {
+    color: black;
 }
 
 a:hover {
-    background-color: #0056b3;
+    color: #0056b3;
 }
 
 .message {

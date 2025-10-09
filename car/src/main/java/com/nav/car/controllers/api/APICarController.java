@@ -12,11 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class CarController {
+public class APICarController {
 
     private final CarService carService;
 
-    public CarController(CarService carService) {
+    public APICarController(CarService carService) {
         this.carService = carService;
     }
 

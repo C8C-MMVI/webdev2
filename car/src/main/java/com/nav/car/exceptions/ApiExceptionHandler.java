@@ -30,4 +30,6 @@ public class ApiExceptionHandler {
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+    //Add exception handler for numbered errors (e.g., 404 Not Found)
 }

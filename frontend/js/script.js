@@ -1,7 +1,9 @@
 const apiBase = "http://localhost:8080/api/cars"
 
 document.addEventListener("DOMContentLoaded", fetchCars)
-
+/* What to add (from suggestions):
+* Show a validation similar to your SpringBoot code
+*/
 function fetchCars() {
     fetch(apiBase)
         .then(res => res.json())

@@ -1,4 +1,4 @@
-package com.nav.car;
+package com.nav.car.security;
 
 import com.nav.car.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;

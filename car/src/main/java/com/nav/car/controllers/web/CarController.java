@@ -1,4 +1,4 @@
-package com.nav.car.controllers;
+package com.nav.car.controllers.web;
 
 import com.nav.car.dto.CarDTO;
 import com.nav.car.exceptions.ResourceNotFoundException;

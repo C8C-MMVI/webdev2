@@ -1,4 +1,4 @@
-package com.nav.car.controllers;
+package com.nav.car.controllers.web;
 
 import com.nav.car.service.UserService;
 import org.springframework.stereotype.Controller;

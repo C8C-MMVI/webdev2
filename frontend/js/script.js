@@ -37,7 +37,7 @@ function openCreateModal() {
     document.getElementById("carModal").classList.remove("hidden")
 }
 
-function openEditModal(id, make, model, year, color) {
+function openEditModal(id, make, model, year, color, bodyType, engineType, licensePlate) {
     document.getElementById("carId").value = id
     document.getElementById("carMake").value = make
     document.getElementById("carModel").value = model

@@ -19,7 +19,7 @@ public class APIAuthController {
     private final JwtTokenService jwtTokenService;
     private final UserService userService;
 
-    public ApiAuthController(AuthenticationManager authenticationManager,
+    public APIAuthController(AuthenticationManager authenticationManager,
                              JwtTokenService jwtTokenService, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenService = jwtTokenService;
@@ -59,7 +59,12 @@ public class APIAuthController {
     }
 
     @GetMapping("/validate")
-    public String validateToken() {
-        return "Token is valid";
+    public String validateToken(@RequestParam String token) {
+        try {
+            jwtTokenService.extractUsername(token);
+            return "Token is valid";
+        } catch (Exception e) {
+            return "Invalid or expired token";
+        }
     }
 }

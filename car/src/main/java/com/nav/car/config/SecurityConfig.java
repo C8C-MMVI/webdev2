@@ -74,7 +74,7 @@ public class SecurityConfig {
                 .securityMatcher((request) -> !request.getRequestURI().startsWith("/api"))
                 .csrf(withDefaults())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/", "/login", "/register", "/public/**",
+                    auth.requestMatchers("/login", "/register", "/public/**",
                             "/css/**", "/js/**", "/images/**").permitAll();
                     auth.anyRequest().authenticated();
                 })

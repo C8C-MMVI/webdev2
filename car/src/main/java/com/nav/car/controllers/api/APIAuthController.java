@@ -3,7 +3,6 @@ package com.nav.car.controllers.api;
 import com.nav.car.dto.AuthRequest;
 import com.nav.car.dto.AuthResponse;
 import com.nav.car.dto.RegisterRequest;
-import com.nav.car.models.User;
 import com.nav.car.service.JwtTokenService;
 import com.nav.car.service.UserService;
 import jakarta.validation.Valid;

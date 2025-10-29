@@ -1,8 +1,24 @@
 var apiUrl = 'http://localhost:8080/api';
-var jwtToken = '';
+var jwtToken = localStorage.getItem('jwtToken') || '';
 var editingCarId = null;
 
-document.getElementById('loginBtn').addEventListener('click', function() {
+// ---------------------- LOGOUT ----------------------
+function logout() {
+    // Clear the token
+    localStorage.removeItem('jwtToken');
+    jwtToken = '';
+
+    // Hide car section & modal, show login section
+    document.getElementById('carSection').classList.add('hidden');
+    document.getElementById('carModal').classList.add('hidden');
+    document.getElementById('loginSection').classList.remove('hidden');
+
+    alert('Logged out successfully!');
+}
+
+// ---------------------- LOGIN ----------------------
+document.getElementById('loginBtn').addEventListener('click', function(e) {
+    e.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     login(username, password);
@@ -11,14 +27,21 @@ document.getElementById('loginBtn').addEventListener('click', function() {
 function login(username, password) {
     fetch(`${apiUrl}/auth/login`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
     })
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) throw new Error('Invalid credentials');
+        return res.json();
+    })
     .then(data => {
         jwtToken = data.token;
+        localStorage.setItem('jwtToken', jwtToken);
+
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('carSection').classList.remove('hidden');
+
+        alert('Login successful!');
         fetchCar();
     })
     .catch(error => {
@@ -27,154 +50,126 @@ function login(username, password) {
     });
 }
 
-function fetchCar(){
-    fetch(`${apiUrl}/cars`,{
-        headers: {
-            'Authorization': `Bearer ${jwtToken}`
-        }
-    })
-    .then(res => res.json())
-    .then(cars => {
-        console.log(cars);
-        const row = document.getElementById('tableBody');
-        row.innerHTML = '';
-        var counter = 0;
-        cars.forEach(car => {
-            row.innerHTML += `
-            <tr class="text-center">
-                <td>${++counter}</td>
-                <td>${car.make}</td>
-                <td>${car.model}</td>
-                <td>${car.year}</td>
-                <td>${car.licensePlateNumber}</td>
-                <td>${car.color}</td>
-                <td>${car.bodyType}</td>
-                <td>${car.engineType}</td>
-                <td>
-                <button onclick="deleteCar(${car.id})">Delete</button>
-                <button onclick="editCar(${car.id})">Edit</button>
-                </td>
-            </tr>
-        `;
+// ---------------------- FETCH CARS ----------------------
+function fetchCar() {
+    if (!jwtToken) return;
+
+    fetch(`${apiUrl}/cars`, { headers: { 'Authorization': `Bearer ${jwtToken}` }})
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
         })
-    })
-    .catch(error => console.error(error));
+        .then(cars => {
+            const row = document.getElementById('carTableBody');
+            row.innerHTML = '';
+            let counter = 0;
+            cars.forEach(car => {
+                row.innerHTML += `
+                <tr class="text-center">
+                    <td>${++counter}</td>
+                    <td>${car.make}</td>
+                    <td>${car.model}</td>
+                    <td>${car.year}</td>
+                    <td>${car.color}</td>
+                    <td>${car.bodyType}</td>
+                    <td>${car.engineType}</td>
+                    <td>
+                        <button onclick="deleteCar(${car.id})" class="text-red-600">Delete</button>
+                        <button onclick="editCar(${car.id})" class="text-blue-600 ml-2">Edit</button>
+                    </td>
+                </tr>`;
+            });
+        })
+        .catch(error => console.error('Error fetching cars:', error));
 }
 
+// ---------------------- DELETE ----------------------
 function deleteCar(carId) {
     fetch(`${apiUrl}/cars/${carId}`, {
         method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${jwtToken}`,
-            'Content-Type': 'application/json'
-        }
+        headers: { 'Authorization': `Bearer ${jwtToken}` }
     })
     .then(() => fetchCar())
     .catch(error => console.error(error));
 }
 
-function openModal() {
-    const modal = document.getElementById('formSection');
-    modal.classList.remove('hidden');
-    modal.querySelector("#modalTitle").innerText = "Add New Car";
-}
-
-
+// ---------------------- EDIT / SAVE ----------------------
 function editCar(carId) {
-    fetch(`${apiUrl}/cars/${carId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${jwtToken}`
-        }
-    })
-    .then(async res => {
-        const contentType = res.headers.get("content-type");
-        if (!res.ok) {
-            const text = await res.text();
-            alert("Error: " + text);
-            return;
-        }
-        if (!contentType || !contentType.includes("application/json")) {
-            const text = await res.text();
-            alert("Non-JSON response: " + text);
-            return;
-        }
-        const car = await res.json();
+    fetch(`${apiUrl}/cars/${carId}`, { headers: { 'Authorization': `Bearer ${jwtToken}` }})
+    .then(res => res.json())
+    .then(car => {
         editingCarId = carId;
-        const modal = document.getElementById('formSection');
+        const modal = document.getElementById('carModal');
         modal.classList.remove('hidden');
-        modal.querySelector("#modalTitle").innerText = "Edit Car";
-        document.getElementById('make').value = car.make;
-        document.getElementById('model').value = car.model;
-        document.getElementById('year').value = car.year;
-        document.getElementById('licensePlateNumber').value = car.licensePlateNumber;
-        document.getElementById('color').value = car.color;
-        document.getElementById('bodyType').value = car.bodyType;
-        document.getElementById('engineType').value = car.engineType;
+        document.getElementById('modalTitle').innerText = "Edit Car";
+
+        document.getElementById('carMake').value = car.make;
+        document.getElementById('carModel').value = car.model;
+        document.getElementById('carYear').value = car.year;
+        document.getElementById('carColor').value = car.color;
+        document.getElementById('carBodyType').value = car.bodyType;
+        document.getElementById('carEngineType').value = car.engineType;
     })
     .catch(error => console.error(error));
 }
 
 function saveCar(event) {
     event.preventDefault();
-    const make = document.getElementById('make').value;
-    const model = document.getElementById('model').value;
-    const year = document.getElementById('year').value;
-    const licensePlateNumber = document.getElementById('licensePlateNumber').value;
-    const color = document.getElementById('color').value;
-    const bodyType = document.getElementById('bodyType').value;
-    const engineType = document.getElementById('engineType').value;
     const carData = {
-        "make":make,
-        "model":model,
-        "year":year,
-        "licensePlateNumber": licensePlateNumber,
-        "color":color,
-        "bodyType":bodyType,
-        "engineType":engineType,
-        "transmission":transmission
+        make: document.getElementById('carMake').value,
+        model: document.getElementById('carModel').value,
+        year: document.getElementById('carYear').value,
+        color: document.getElementById('carColor').value,
+        bodyType: document.getElementById('carBodyType').value,
+        engineType: document.getElementById('carEngineType').value
     };
 
-    if (editingCarId) {
-        fetch(`${apiUrl}/cars/${editingCarId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${jwtToken}` // <-- Add this line
-            },
-            body: JSON.stringify(carData)
-        })
-        .then(res => res.json())
-        .then(res => {
-            editingCarId = null;
-            closeModal();
-            fetchCar();
-        })
-        .catch(error => console.error('Error:', error));
-    } else {
-        fetch(`${apiUrl}/cars`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${jwtToken}` // <-- Add this line
-            },
-            body: JSON.stringify(carData)
-        })
-        .then(res => res.json())
-        .then(res => {
-            closeModal();
-            fetchCar();
-        })
-        .catch(error => console.error('Error:', error));
-    }
+    const url = editingCarId ? `${apiUrl}/cars/${editingCarId}` : `${apiUrl}/cars`;
+    const method = editingCarId ? 'PUT' : 'POST';
+
+    fetch(url, {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`
+        },
+        body: JSON.stringify(carData)
+    })
+    .then(res => {
+        if (!res.ok) throw new Error('Save failed');
+        return res.json();
+    })
+    .then(() => {
+        editingCarId = null;
+        closeModal();
+        fetchCar();
+    })
+    .catch(error => console.error(error));
 }
 
-function closeModal() {
-    const modal = document.getElementById('formSection');
-    modal.classList.add('hidden');
+// ---------------------- MODAL ----------------------
+function openCreateModal() {
+    editingCarId = null;
+    const modal = document.getElementById('carModal');
+    modal.classList.remove('hidden');
+    document.getElementById('modalTitle').innerText = "Add New Car";
     document.getElementById('carForm').reset();
 }
 
+function closeModal() {
+    document.getElementById('carModal').classList.add('hidden');
+    document.getElementById('carForm').reset();
+}
+
+// ---------------------- AUTOLOAD ----------------------
+window.addEventListener('DOMContentLoaded', () => {
+    if (jwtToken) {
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('carSection').classList.remove('hidden');
+        fetchCar();
+    }
+});
+
 window.editCar = editCar;
+window.deleteCar = deleteCar;
+window.logout = logout; // make logout accessible globally

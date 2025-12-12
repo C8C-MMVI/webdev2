@@ -10,7 +10,7 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int transactionId;
 
     private LocalDate transactionDate;
 
@@ -24,8 +24,8 @@ public class Transaction {
     private List<TransactionDetails> transactionDetails;
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public int getTransactionId() { return transactionId; }
+    public void setTransactionId(int id) { this.transactionId = id; }
     public LocalDate getTransactionDate() { return transactionDate; }
     public void setTransactionDate(LocalDate transactionDate) { this.transactionDate = transactionDate; }
     public Double getTotalAmount() { return totalAmount; }

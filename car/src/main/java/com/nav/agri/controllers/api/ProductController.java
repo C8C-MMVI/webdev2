@@ -22,7 +22,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable Long id) {
+    public Product getProduct(@PathVariable int id) {
         return repo.findById(id).orElse(null);
     }
 
@@ -32,13 +32,13 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        product.setId(id);
+    public Product updateProduct(@PathVariable int id, @RequestBody Product product) {
+        product.setProductId(id);
         return repo.save(product);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
+    public void deleteProduct(@PathVariable int id) {
         repo.deleteById(id);
     }
 }

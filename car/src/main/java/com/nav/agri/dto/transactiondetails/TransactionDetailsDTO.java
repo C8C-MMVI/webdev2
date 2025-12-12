@@ -1,60 +1,39 @@
 package com.nav.agri.dto.transactiondetails;
 
 public class TransactionDetailsDTO {
-    private Long transactionDetailsId;
+    private int transactionDetailsId;
     private Integer quantity;
     private Double basePrice;
     private Double listPrice;
-    private Long productId;
-    private Long transactionId;
+    private int productId;
+    private int transactionId;
 
-    public Long getTransactionDetailsId() {
-        return transactionDetailsId;
-    }
+    public TransactionDetailsDTO() {}
 
-    public void setTransactionDetailsId(Long transactionDetailsId) {
+    public TransactionDetailsDTO(int transactionDetailsId, Integer quantity, Double basePrice, Double listPrice, int productId, int transactionId) {
         this.transactionDetailsId = transactionDetailsId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public Double getBasePrice() {
-        return basePrice;
-    }
-
-    public void setBasePrice(Double basePrice) {
         this.basePrice = basePrice;
-    }
-
-    public Double getListPrice() {
-        return listPrice;
-    }
-
-    public void setListPrice(Double listPrice) {
         this.listPrice = listPrice;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
         this.productId = productId;
-    }
-
-    public Long getTransactionId() {
-        return transactionId;
-    }
-
-    public void setTransactionId(Long transactionId) {
         this.transactionId = transactionId;
     }
 
-    // Getters & setters...
+    public int getTransactionDetailsId() { return transactionDetailsId; }
+    public void setTransactionDetailsId(int transactionDetailsId) { this.transactionDetailsId = transactionDetailsId; }
+
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
+    public Double getBasePrice() { return basePrice; }
+    public void setBasePrice(Double basePrice) { this.basePrice = basePrice; }
+
+    public Double getListPrice() { return listPrice; }
+    public void setListPrice(Double listPrice) { this.listPrice = listPrice; }
+
+    public int getProductId() { return productId; }
+    public void setProductId(int productId) { this.productId = productId; }
+
+    public int getTransactionId() { return transactionId; }
+    public void setTransactionId(int transactionId) { this.transactionId = transactionId; }
 }

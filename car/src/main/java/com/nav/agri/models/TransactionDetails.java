@@ -8,7 +8,7 @@ public class TransactionDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int transactionDetailsId;
 
     private Integer quantity;
 
@@ -25,8 +25,8 @@ public class TransactionDetails {
     private Transaction transaction;
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public int getTransactionDetailsId() { return transactionDetailsId; }
+    public void setTransactionDetailsId(int id) { this.transactionDetailsId = id; }
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
     public Double getBasePrice() { return basePrice; }

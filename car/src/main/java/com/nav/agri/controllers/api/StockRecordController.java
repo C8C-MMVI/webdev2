@@ -22,7 +22,7 @@ public class StockRecordController {
     }
 
     @GetMapping("/{id}")
-    public StockRecord get(@PathVariable Long id) {
+    public StockRecord get(@PathVariable int id) {
         return repo.findById(id).orElse(null);
     }
 
@@ -32,13 +32,13 @@ public class StockRecordController {
     }
 
     @PutMapping("/{id}")
-    public StockRecord update(@PathVariable Long id, @RequestBody StockRecord record) {
-        record.setId(id);
+    public StockRecord update(@PathVariable int id, @RequestBody StockRecord record) {
+        record.setStockRecordId(id);
         return repo.save(record);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable int id) {
         repo.deleteById(id);
     }
 }

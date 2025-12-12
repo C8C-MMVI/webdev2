@@ -9,7 +9,7 @@ public class StockRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int stockRecordId;
 
     private Integer quantity;
 
@@ -26,8 +26,8 @@ public class StockRecord {
     private Supplier supplier;
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public int getStockRecordId() { return stockRecordId; }
+    public void setStockRecordId(int id) { this.stockRecordId = id; }
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
     public Double getUnitPrice() { return unitPrice; }

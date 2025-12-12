@@ -3,60 +3,39 @@ package com.nav.agri.dto.stock;
 import java.time.LocalDate;
 
 public class StockRecordDTO {
-    private Long stockRecordId;
+    private int stockRecordId;
     private Integer quantity;
     private Double unitPrice;
     private LocalDate lastUpdated;
-    private Long productId;
-    private Long supplierId;
+    private int productId;
+    private int supplierId;
 
-    public Long getStockRecordId() {
-        return stockRecordId;
-    }
+    public StockRecordDTO() {}
 
-    public void setStockRecordId(Long stockRecordId) {
+    public StockRecordDTO(int stockRecordId, Integer quantity, Double unitPrice, LocalDate lastUpdated, int productId, int supplierId) {
         this.stockRecordId = stockRecordId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public Double getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
-    }
-
-    public LocalDate getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(LocalDate lastUpdated) {
         this.lastUpdated = lastUpdated;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
         this.productId = productId;
-    }
-
-    public Long getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(Long supplierId) {
         this.supplierId = supplierId;
     }
 
-    // Getters & setters...
+    public int getStockRecordId() { return stockRecordId; }
+    public void setStockRecordId(int stockRecordId) { this.stockRecordId = stockRecordId; }
+
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
+    public Double getUnitPrice() { return unitPrice; }
+    public void setUnitPrice(Double unitPrice) { this.unitPrice = unitPrice; }
+
+    public LocalDate getLastUpdated() { return lastUpdated; }
+    public void setLastUpdated(LocalDate lastUpdated) { this.lastUpdated = lastUpdated; }
+
+    public int getProductId() { return productId; }
+    public void setProductId(int productId) { this.productId = productId; }
+
+    public int getSupplierId() { return supplierId; }
+    public void setSupplierId(int supplierId) { this.supplierId = supplierId; }
 }

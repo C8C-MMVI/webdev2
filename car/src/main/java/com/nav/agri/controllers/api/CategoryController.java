@@ -22,7 +22,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public Category getCategory(@PathVariable Long id) {
+    public Category getCategory(@PathVariable int id) {
         return repo.findById(id).orElse(null);
     }
 
@@ -32,13 +32,13 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public Category updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        category.setId(id);
+    public Category updateCategory(@PathVariable int id, @RequestBody Category category) {
+        category.setCategoryId(id);
         return repo.save(category);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCategory(@PathVariable Long id) {
+    public void deleteCategory(@PathVariable int id) {
         repo.deleteById(id);
     }
 }

@@ -1,6 +1,5 @@
 package com.nav.agri.utils;
 
-import com.nav.agri.repositories.CarRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

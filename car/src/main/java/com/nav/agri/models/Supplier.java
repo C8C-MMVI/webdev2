@@ -9,7 +9,7 @@ public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int supplierId;
 
     @Column(nullable = false)
     private String name;
@@ -24,8 +24,8 @@ public class Supplier {
     private List<StockRecord> stockRecords;
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public int getSupplierId() { return supplierId; }
+    public void setSupplierId(int id) { this.supplierId = id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public Integer getContactInfo() { return contactInfo; }

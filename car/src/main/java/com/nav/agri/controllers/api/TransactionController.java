@@ -22,7 +22,7 @@ public class TransactionController {
     }
 
     @GetMapping("/{id}")
-    public Transaction get(@PathVariable Long id) {
+    public Transaction get(@PathVariable int id) {
         return repo.findById(id).orElse(null);
     }
 
@@ -32,13 +32,13 @@ public class TransactionController {
     }
 
     @PutMapping("/{id}")
-    public Transaction update(@PathVariable Long id, @RequestBody Transaction transaction) {
-        transaction.setId(id);
+    public Transaction update(@PathVariable int id, @RequestBody Transaction transaction) {
+        transaction.setTransactionId(id);
         return repo.save(transaction);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable int id) {
         repo.deleteById(id);
     }
 }

@@ -3,42 +3,29 @@ package com.nav.agri.dto.transaction;
 import java.time.LocalDate;
 
 public class TransactionDTO {
-    private Long transactionId;
+    private int transactionId;
     private LocalDate transactionDate;
     private Double totalAmount;
-    private Long userId;
+    private int userId;
 
-    public Long getTransactionId() {
-        return transactionId;
-    }
+    public TransactionDTO() {}
 
-    public void setTransactionId(Long transactionId) {
+    public TransactionDTO(int transactionId, LocalDate transactionDate, Double totalAmount, int userId) {
         this.transactionId = transactionId;
-    }
-
-    public LocalDate getTransactionDate() {
-        return transactionDate;
-    }
-
-    public void setTransactionDate(LocalDate transactionDate) {
         this.transactionDate = transactionDate;
-    }
-
-    public Double getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    // Getters & setters...
+    public int getTransactionId() { return transactionId; }
+    public void setTransactionId(int transactionId) { this.transactionId = transactionId; }
+
+    public LocalDate getTransactionDate() { return transactionDate; }
+    public void setTransactionDate(LocalDate transactionDate) { this.transactionDate = transactionDate; }
+
+    public Double getTotalAmount() { return totalAmount; }
+    public void setTotalAmount(Double totalAmount) { this.totalAmount = totalAmount; }
+
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
 }

@@ -1,15 +1,24 @@
 package com.nav.agri.dto.category;
 
 public class CategoryDTO {
-    private Long categoryId;
+    private int categoryId;
     private String categoryName;
     private String description;
 
-    public Long getCategoryId() {
+    public CategoryDTO() {} // no-arg constructor for Jackson
+
+    public CategoryDTO(int categoryId, String categoryName, String description) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.description = description;
+    }
+
+
+    public int getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Long categoryId) {
+    public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -29,3 +38,4 @@ public class CategoryDTO {
         this.description = description;
     }
 }
+

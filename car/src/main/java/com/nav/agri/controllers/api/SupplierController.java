@@ -22,7 +22,7 @@ public class SupplierController {
     }
 
     @GetMapping("/{id}")
-    public Supplier getSupplier(@PathVariable Long id) {
+    public Supplier getSupplier(@PathVariable int id) {
         return repo.findById(id).orElse(null);
     }
 
@@ -32,13 +32,13 @@ public class SupplierController {
     }
 
     @PutMapping("/{id}")
-    public Supplier updateSupplier(@PathVariable Long id, @RequestBody Supplier supplier) {
-        supplier.setId(id);
+    public Supplier updateSupplier(@PathVariable int id, @RequestBody Supplier supplier) {
+        supplier.setSupplierId(id);
         return repo.save(supplier);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSupplier(@PathVariable Long id) {
+    public void deleteSupplier(@PathVariable int id) {
         repo.deleteById(id);
     }
 }

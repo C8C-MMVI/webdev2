@@ -33,7 +33,7 @@ public class TransactionDetailsController {
 
     @PutMapping("/{id}")
     public TransactionDetails update(@PathVariable int id, @RequestBody TransactionDetails details) {
-        details.setId(id);
+        details.setTransactionDetailsId(id);
         return repo.save(details);
     }
 

@@ -44,7 +44,7 @@ public class SecurityConfig {
     }
 
     /**
-     * API Security (JWT, stateless)
+     * API Security Filter Chain (JWT, stateless)
      */
     @Bean
     @Order(1)
@@ -54,7 +54,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/public/**", "api/agri/").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtConfig.jwtDecoder(), customUserDetailsService),
@@ -65,7 +65,7 @@ public class SecurityConfig {
     }
 
     /**
-     * Web Security (Form login, session-based)
+     * Web Security Filter Chain (Form login, session-based)
      */
     @Bean
     @Order(2)
@@ -95,12 +95,12 @@ public class SecurityConfig {
     }
 
     /**
-     * Global CORS configuration for API & web
+     * Global CORS configuration for API & Web
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:8080"));
+        config.setAllowedOrigins(List.of("http://localhost:5173")); // your frontend URL
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

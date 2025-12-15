@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/agri/transaction-details")
+@RequestMapping("/api/transaction-details")
 public class TransactionDetailsController {
 
     private final TransactionDetailsRepository repo;

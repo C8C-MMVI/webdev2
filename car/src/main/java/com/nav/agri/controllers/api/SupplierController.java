@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/agri/suppliers")
+@RequestMapping("/api/suppliers")
 public class SupplierController {
 
     private final SupplierRepository repo;

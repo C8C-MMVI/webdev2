@@ -12,22 +12,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.List;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
-    private final JwtConfig jwtConfig;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtConfig jwtConfig) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
         this.customUserDetailsService = customUserDetailsService;
-        this.jwtConfig = jwtConfig;
     }
 
     @Bean
@@ -36,32 +32,37 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authManager() {
+    public AuthenticationManager authManager(PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(customUserDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(authProvider);
     }
 
     /**
-     * API Security Filter Chain (JWT, stateless)
+     * API Security Filter Chain (JWT-based, Stateless)
      */
     @Bean
     @Order(1)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
-        http
+        return http
                 .securityMatcher("/api/**")
+                .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/public/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtConfig.jwtDecoder(), customUserDetailsService),
-                        UsernamePasswordAuthenticationFilter.class)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
-
-        return http.build();
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/api/auth/**").permitAll();
+                    auth.requestMatchers("/api/public/**").permitAll();
+                    auth.requestMatchers("/api/categories/**").permitAll();
+                    auth.requestMatchers("/api/products/**").permitAll();
+                    auth.requestMatchers("/api/stock-records/**").permitAll();
+                    auth.requestMatchers("/api/suppliers/**").permitAll();
+                    auth.requestMatchers("/api/transactions/**").permitAll();
+                    auth.requestMatchers("/api/transaction-details/**").permitAll();
+                    auth.anyRequest().authenticated();
+                })
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .build();
     }
 
     /**
@@ -70,17 +71,19 @@ public class SecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
-        http
+        return http
                 .securityMatcher((request) -> !request.getRequestURI().startsWith("/api"))
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/public/**",
-                                "/css/**", "/js/**", "/images/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+                .csrf(withDefaults())
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/", "/login", "/register", "/public/**",
+                            "/css/**", "/js/**", "/images/**", "/error").permitAll();
+                    auth.anyRequest().authenticated();
+                })
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .loginProcessingUrl("/perform-login")  // Process POST at different URL
+                        .defaultSuccessUrl("/dashboard", true)
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -88,25 +91,34 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
-
-        return http.build();
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            // Prevent redirect loop on /login itself
+                            String requestUri = request.getRequestURI();
+                            if ("/login".equals(requestUri)) {
+                                response.setStatus(401);
+                                response.getWriter().write("Unauthorized");
+                            } else {
+                                response.sendRedirect("/login");
+                            }
+                        })
+                )
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .build();
     }
 
-    /**
-     * Global CORS configuration for API & Web
-     */
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // your frontend URL
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/api/**")
+                        .allowedOrigins("http://localhost:5173", "http://127.0.0.1:5500", "http://localhost:8080")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
     }
 }

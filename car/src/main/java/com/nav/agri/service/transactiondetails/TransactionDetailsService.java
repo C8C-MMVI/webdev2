@@ -1,18 +1,14 @@
 package com.nav.agri.service.transactiondetails;
 
-import com.nav.agri.dto.transactiondetails.TransactionDetailsCreateDTO;
-import com.nav.agri.dto.transactiondetails.TransactionDetailsDTO;
+import com.nav.agri.dto.transactiondetails.TransactionDetailsRequestDTO;
+import com.nav.agri.dto.transactiondetails.TransactionDetailsResponseDTO;
+
 import java.util.List;
 
 public interface TransactionDetailsService {
-
-    TransactionDetailsDTO createTransactionDetails(TransactionDetailsCreateDTO dto);
-
-    TransactionDetailsDTO getTransactionDetails(int id);
-
-    List<TransactionDetailsDTO> getAllTransactionDetails();
-
-    TransactionDetailsDTO updateTransactionDetails(int id, TransactionDetailsCreateDTO dto);
-
+    TransactionDetailsResponseDTO createTransactionDetails(TransactionDetailsRequestDTO dto);
+    TransactionDetailsResponseDTO getTransactionDetails(int id);
+    List<TransactionDetailsResponseDTO> getAllTransactionDetails();
+    TransactionDetailsResponseDTO updateTransactionDetails(int id, TransactionDetailsRequestDTO dto);
     void deleteTransactionDetails(int id);
 }

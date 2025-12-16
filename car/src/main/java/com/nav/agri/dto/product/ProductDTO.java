@@ -1,23 +1,17 @@
 package com.nav.agri.dto.product;
 
 public class ProductDTO {
+
     private int productId;
     private String productName;
     private String description;
     private Double basePrice;
     private Double listPrice;
+
     private int categoryId;
+    private String categoryName;
 
     public ProductDTO() {}
-
-    public ProductDTO(int productId, String productName, String description, Double basePrice, Double listPrice, int categoryId) {
-        this.productId = productId;
-        this.productName = productName;
-        this.description = description;
-        this.basePrice = basePrice;
-        this.listPrice = listPrice;
-        this.categoryId = categoryId;
-    }
 
     public int getProductId() { return productId; }
     public void setProductId(int productId) { this.productId = productId; }
@@ -36,4 +30,7 @@ public class ProductDTO {
 
     public int getCategoryId() { return categoryId; }
     public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
+
+    public String getCategoryName() { return categoryName; }
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 }

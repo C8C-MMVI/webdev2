@@ -1,11 +1,15 @@
 package com.nav.agri.service.transaction;
 
-import com.nav.agri.dto.transaction.TransactionCreateDTO;
-import com.nav.agri.dto.transaction.TransactionDTO;
+import com.nav.agri.dto.transaction.TransactionRequestDTO;
+import com.nav.agri.dto.transaction.TransactionResponseDTO;
+import com.nav.agri.dto.transaction.TransactionItemDTO;
 import com.nav.agri.models.Transaction;
+import com.nav.agri.models.TransactionDetails;
 import com.nav.agri.models.User;
+import com.nav.agri.models.Product;
 import com.nav.agri.repositories.TransactionRepository;
 import com.nav.agri.repositories.UserRepository;
+import com.nav.agri.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,65 +18,122 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
-    private final TransactionRepository repo;
+    private final TransactionRepository transactionRepo;
     private final UserRepository userRepo;
+    private final ProductRepository productRepo;
 
-    public TransactionServiceImpl(TransactionRepository repo, UserRepository userRepo) {
-        this.repo = repo;
+    public TransactionServiceImpl(TransactionRepository transactionRepo, UserRepository userRepo, ProductRepository productRepo) {
+        this.transactionRepo = transactionRepo;
         this.userRepo = userRepo;
+        this.productRepo = productRepo;
     }
 
     @Override
-    public TransactionDTO createTransaction(TransactionCreateDTO dto) {
-        User user = userRepo.findById(dto.getUserId())
+    public TransactionResponseDTO createTransaction(TransactionRequestDTO request) {
+        User user = userRepo.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Transaction transaction = new Transaction();
-        transaction.setTransactionDate(dto.getTransactionDate());
-        transaction.setTotalAmount(dto.getTotalAmount());
         transaction.setUser(user);
+        transaction.setTransactionDate(request.getTransactionDate());
+        transaction.setTotalAmount(request.getTotalAmount());
 
-        return toDTO(repo.save(transaction));
+        // Map transaction items
+        List<TransactionDetails> details = request.getItems().stream().map(item -> {
+            Product product = productRepo.findById(item.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            TransactionDetails td = new TransactionDetails();
+            td.setProduct(product);
+            td.setQuantity(item.getQuantity());
+            td.setBasePrice(item.getBasePrice());
+            td.setListPrice(item.getListPrice());
+            td.setTransaction(transaction);
+            return td;
+        }).toList();
+
+        transaction.setTransactionDetails(details);
+
+        Transaction savedTransaction = transactionRepo.save(transaction);
+
+        return mapToResponseDTO(savedTransaction);
     }
 
     @Override
-    public TransactionDTO getTransaction(int transactionId) {
-        return toDTO(repo.findById(transactionId)
-                .orElseThrow(() -> new RuntimeException("Transaction not found")));
+    public TransactionResponseDTO getTransaction(int id) {
+        Transaction transaction = transactionRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+        return mapToResponseDTO(transaction);
     }
 
     @Override
-    public List<TransactionDTO> getAllTransactions() {
-        return repo.findAll().stream()
-                .map(this::toDTO)
+    public List<TransactionResponseDTO> getAllTransactions() {
+        return transactionRepo.findAll().stream()
+                .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public TransactionDTO updateTransaction(int transactionId, TransactionCreateDTO dto) {
-        Transaction transaction = repo.findById(transactionId)
+    public TransactionResponseDTO updateTransaction(int id, TransactionRequestDTO request) {
+        Transaction transaction = transactionRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
-        User user = userRepo.findById(dto.getUserId())
+
+        User user = userRepo.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        transaction.setTransactionDate(dto.getTransactionDate());
-        transaction.setTotalAmount(dto.getTotalAmount());
         transaction.setUser(user);
+        transaction.setTransactionDate(request.getTransactionDate());
+        transaction.setTotalAmount(request.getTotalAmount());
 
-        return toDTO(repo.save(transaction));
+        // Clear existing details and replace with new ones
+        transaction.getTransactionDetails().clear();
+
+        List<TransactionDetails> updatedDetails = request.getItems().stream().map(item -> {
+            Product product = productRepo.findById(item.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            TransactionDetails td = new TransactionDetails();
+            td.setProduct(product);
+            td.setQuantity(item.getQuantity());
+            td.setBasePrice(item.getBasePrice());
+            td.setListPrice(item.getListPrice());
+            td.setTransaction(transaction);
+            return td;
+        }).toList();
+
+        transaction.setTransactionDetails(updatedDetails);
+
+        Transaction savedTransaction = transactionRepo.save(transaction);
+
+        return mapToResponseDTO(savedTransaction);
     }
 
     @Override
-    public void deleteTransaction(int transactionId) {
-        repo.deleteById(transactionId);
+    public void deleteTransaction(int id) {
+        transactionRepo.deleteById(id);
     }
 
-    private TransactionDTO toDTO(Transaction transaction) {
-        return new TransactionDTO(
-                transaction.getTransactionId(),
-                transaction.getTransactionDate(),
-                transaction.getTotalAmount(),
-                transaction.getUser().getId() // Long userId
-        );
+    /* =====================
+       Helper to map Transaction -> TransactionResponseDTO
+    ===================== */
+    private TransactionResponseDTO mapToResponseDTO(Transaction transaction) {
+        TransactionResponseDTO response = new TransactionResponseDTO();
+        response.setTransactionId(transaction.getTransactionId());
+        response.setTransactionDate(transaction.getTransactionDate());
+        response.setTotalAmount(transaction.getTotalAmount());
+        response.setUserId(transaction.getUser().getId());
+
+        List<TransactionItemDTO> items = transaction.getTransactionDetails().stream().map(td -> {
+            TransactionItemDTO itemDTO = new TransactionItemDTO();
+            itemDTO.setProductId(td.getProduct().getProductId());
+            itemDTO.setProductName(td.getProduct().getProductName());
+            itemDTO.setQuantity(td.getQuantity());
+            itemDTO.setBasePrice(td.getBasePrice());
+            itemDTO.setListPrice(td.getListPrice());
+            return itemDTO;
+        }).toList();
+
+        response.setItems(items);
+        return response;
     }
 }

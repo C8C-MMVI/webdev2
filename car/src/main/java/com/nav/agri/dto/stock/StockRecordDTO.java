@@ -7,19 +7,14 @@ public class StockRecordDTO {
     private Integer quantity;
     private Double unitPrice;
     private LocalDate lastUpdated;
+
     private int productId;
+    private String productName;
+
     private int supplierId;
+    private String supplierName;
 
     public StockRecordDTO() {}
-
-    public StockRecordDTO(int stockRecordId, Integer quantity, Double unitPrice, LocalDate lastUpdated, int productId, int supplierId) {
-        this.stockRecordId = stockRecordId;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-        this.lastUpdated = lastUpdated;
-        this.productId = productId;
-        this.supplierId = supplierId;
-    }
 
     public int getStockRecordId() { return stockRecordId; }
     public void setStockRecordId(int stockRecordId) { this.stockRecordId = stockRecordId; }
@@ -36,6 +31,12 @@ public class StockRecordDTO {
     public int getProductId() { return productId; }
     public void setProductId(int productId) { this.productId = productId; }
 
+    public String getProductName() { return productName; }
+    public void setProductName(String productName) { this.productName = productName; }
+
     public int getSupplierId() { return supplierId; }
     public void setSupplierId(int supplierId) { this.supplierId = supplierId; }
+
+    public String getSupplierName() { return supplierName; }
+    public void setSupplierName(String supplierName) { this.supplierName = supplierName; }
 }

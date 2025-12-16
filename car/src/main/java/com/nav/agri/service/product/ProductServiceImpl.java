@@ -24,23 +24,27 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO createProduct(ProductCreateDTO dto) {
-        Category category = categoryRepo.findById(dto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-
         Product product = new Product();
         product.setProductName(dto.getProductName());
         product.setDescription(dto.getDescription());
         product.setBasePrice(dto.getBasePrice());
         product.setListPrice(dto.getListPrice());
-        product.setCategory(category);
+
+        // Optional category
+        if (dto.getCategoryId() > 0) {
+            Category category = categoryRepo.findById(dto.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+            product.setCategory(category);
+        }
 
         return toDTO(repo.save(product));
     }
 
     @Override
     public ProductDTO getProduct(int id) {
-        return toDTO(repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found")));
+        Product product = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        return toDTO(product);
     }
 
     @Override
@@ -54,14 +58,20 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO updateProduct(int id, ProductCreateDTO dto) {
         Product product = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-        Category category = categoryRepo.findById(dto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
 
         product.setProductName(dto.getProductName());
         product.setDescription(dto.getDescription());
         product.setBasePrice(dto.getBasePrice());
         product.setListPrice(dto.getListPrice());
-        product.setCategory(category);
+
+        // Optional category
+        if (dto.getCategoryId() > 0) {
+            Category category = categoryRepo.findById(dto.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+            product.setCategory(category);
+        } else {
+            product.setCategory(null); // clear category if no valid ID
+        }
 
         return toDTO(repo.save(product));
     }
@@ -72,13 +82,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private ProductDTO toDTO(Product product) {
-        return new ProductDTO(
-                product.getProductId(),
-                product.getProductName(),
-                product.getDescription(),
-                product.getBasePrice(),
-                product.getListPrice(),
-                product.getCategory().getCategoryId()
-        );
+        ProductDTO dto = new ProductDTO();
+        dto.setProductId(product.getProductId());
+        dto.setProductName(product.getProductName());
+        dto.setDescription(product.getDescription());
+        dto.setBasePrice(product.getBasePrice());
+        dto.setListPrice(product.getListPrice());
+
+        if (product.getCategory() != null) {
+            dto.setCategoryId(product.getCategory().getCategoryId());
+            dto.setCategoryName(product.getCategory().getCategoryName());
+        }
+
+        return dto;
     }
 }

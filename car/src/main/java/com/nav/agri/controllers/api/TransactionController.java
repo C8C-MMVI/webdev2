@@ -1,7 +1,8 @@
 package com.nav.agri.controllers.api;
 
-import com.nav.agri.models.Transaction;
-import com.nav.agri.repositories.TransactionRepository;
+import com.nav.agri.dto.transaction.TransactionRequestDTO;
+import com.nav.agri.dto.transaction.TransactionResponseDTO;
+import com.nav.agri.service.transaction.TransactionService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,35 +11,34 @@ import java.util.List;
 @RequestMapping("/api/transactions")
 public class TransactionController {
 
-    private final TransactionRepository repo;
+    private final TransactionService transactionService;
 
-    public TransactionController(TransactionRepository repo) {
-        this.repo = repo;
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
     @GetMapping
-    public List<Transaction> getAll() {
-        return repo.findAll();
+    public List<TransactionResponseDTO> getAll() {
+        return transactionService.getAllTransactions();
     }
 
     @GetMapping("/{id}")
-    public Transaction get(@PathVariable int id) {
-        return repo.findById(id).orElse(null);
+    public TransactionResponseDTO get(@PathVariable int id) {
+        return transactionService.getTransaction(id);
     }
 
     @PostMapping
-    public Transaction create(@RequestBody Transaction transaction) {
-        return repo.save(transaction);
+    public TransactionResponseDTO create(@RequestBody TransactionRequestDTO request) {
+        return transactionService.createTransaction(request);
     }
 
     @PutMapping("/{id}")
-    public Transaction update(@PathVariable int id, @RequestBody Transaction transaction) {
-        transaction.setTransactionId(id);
-        return repo.save(transaction);
+    public TransactionResponseDTO update(@PathVariable int id, @RequestBody TransactionRequestDTO request) {
+        return transactionService.updateTransaction(id, request);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id) {
-        repo.deleteById(id);
+        transactionService.deleteTransaction(id);
     }
 }

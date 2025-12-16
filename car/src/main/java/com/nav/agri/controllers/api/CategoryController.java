@@ -1,5 +1,6 @@
 package com.nav.agri.controllers.api;
 
+import com.nav.agri.dto.category.CategoryDTO;
 import com.nav.agri.models.Category;
 import com.nav.agri.repositories.CategoryRepository;
 import org.springframework.web.bind.annotation.*;
@@ -16,29 +17,65 @@ public class CategoryController {
         this.repo = repo;
     }
 
+    /* =====================
+       READ
+       ===================== */
     @GetMapping
-    public List<Category> getAllCategories() {
-        return repo.findAll();
+    public List<CategoryDTO> getAllCategories() {
+        return repo.findAll().stream()
+                .map(this::toDTO)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public Category getCategory(@PathVariable int id) {
-        return repo.findById(id).orElse(null);
+    public CategoryDTO getCategory(@PathVariable int id) {
+        return repo.findById(id)
+                .map(this::toDTO)
+                .orElse(null);
     }
 
+    /* =====================
+       CREATE
+       ===================== */
     @PostMapping
-    public Category createCategory(@RequestBody Category category) {
-        return repo.save(category);
+    public CategoryDTO createCategory(@RequestBody CategoryDTO dto) {
+        Category category = toEntity(dto);
+        return toDTO(repo.save(category));
     }
 
+    /* =====================
+       UPDATE
+       ===================== */
     @PutMapping("/{id}")
-    public Category updateCategory(@PathVariable int id, @RequestBody Category category) {
+    public CategoryDTO updateCategory(@PathVariable int id, @RequestBody CategoryDTO dto) {
+        Category category = toEntity(dto);
         category.setCategoryId(id);
-        return repo.save(category);
+        return toDTO(repo.save(category));
     }
 
+    /* =====================
+       DELETE
+       ===================== */
     @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable int id) {
         repo.deleteById(id);
+    }
+
+    /* =====================
+       MAPPERS
+       ===================== */
+    private CategoryDTO toDTO(Category category) {
+        return new CategoryDTO(
+                category.getCategoryId(),
+                category.getCategoryName(),
+                category.getDescription()
+        );
+    }
+
+    private Category toEntity(CategoryDTO dto) {
+        Category category = new Category();
+        category.setCategoryName(dto.getCategoryName());
+        category.setDescription(dto.getDescription());
+        return category;
     }
 }

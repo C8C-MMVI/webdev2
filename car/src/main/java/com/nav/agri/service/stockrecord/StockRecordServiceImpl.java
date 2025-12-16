@@ -9,6 +9,7 @@ import com.nav.agri.repositories.ProductRepository;
 import com.nav.agri.repositories.StockRecordRepository;
 import com.nav.agri.repositories.SupplierRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,10 @@ public class StockRecordServiceImpl implements StockRecordService {
     private final ProductRepository productRepo;
     private final SupplierRepository supplierRepo;
 
-    public StockRecordServiceImpl(StockRecordRepository repo, ProductRepository productRepo, SupplierRepository supplierRepo) {
+    public StockRecordServiceImpl(
+            StockRecordRepository repo,
+            ProductRepository productRepo,
+            SupplierRepository supplierRepo) {
         this.repo = repo;
         this.productRepo = productRepo;
         this.supplierRepo = supplierRepo;
@@ -27,50 +31,41 @@ public class StockRecordServiceImpl implements StockRecordService {
 
     @Override
     public StockRecordDTO createStockRecord(StockRecordCreateDTO dto) {
-        Product product = productRepo.findById(dto.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-        Supplier supplier = supplierRepo.findById(dto.getSupplierId())
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
-
-        StockRecord stockRecord = new StockRecord();
-        stockRecord.setQuantity(dto.getQuantity());
-        stockRecord.setUnitPrice(dto.getUnitPrice());
-        stockRecord.setLastUpdated(dto.getLastUpdated());
-        stockRecord.setProduct(product);
-        stockRecord.setSupplier(supplier);
-
-        return toDTO(repo.save(stockRecord));
+        StockRecord record = mapDTOToEntity(dto);
+        return mapEntityToDTO(repo.save(record));
     }
 
     @Override
     public StockRecordDTO getStockRecord(int id) {
-        return toDTO(repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("StockRecord not found")));
+        return repo.findById(id)
+                .map(this::mapEntityToDTO)
+                .orElseThrow(() -> new RuntimeException("StockRecord not found"));
     }
 
     @Override
     public List<StockRecordDTO> getAllStockRecords() {
         return repo.findAll().stream()
-                .map(this::toDTO)
+                .map(this::mapEntityToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public StockRecordDTO updateStockRecord(int id, StockRecordCreateDTO dto) {
-        StockRecord stockRecord = repo.findById(id)
+        StockRecord record = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("StockRecord not found"));
+
         Product product = productRepo.findById(dto.getProductId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         Supplier supplier = supplierRepo.findById(dto.getSupplierId())
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
 
-        stockRecord.setQuantity(dto.getQuantity());
-        stockRecord.setUnitPrice(dto.getUnitPrice());
-        stockRecord.setLastUpdated(dto.getLastUpdated());
-        stockRecord.setProduct(product);
-        stockRecord.setSupplier(supplier);
+        record.setQuantity(dto.getQuantity());
+        record.setUnitPrice(dto.getUnitPrice());
+        record.setLastUpdated(dto.getLastUpdated());
+        record.setProduct(product);
+        record.setSupplier(supplier);
 
-        return toDTO(repo.save(stockRecord));
+        return mapEntityToDTO(repo.save(record));
     }
 
     @Override
@@ -78,14 +73,36 @@ public class StockRecordServiceImpl implements StockRecordService {
         repo.deleteById(id);
     }
 
-    private StockRecordDTO toDTO(StockRecord sr) {
-        return new StockRecordDTO(
-                sr.getStockRecordId(),
-                sr.getQuantity(),
-                sr.getUnitPrice(),
-                sr.getLastUpdated(),
-                sr.getProduct().getProductId(),
-                sr.getSupplier().getSupplierId()
-        );
+    /* ===================== Helpers ===================== */
+    private StockRecord mapDTOToEntity(StockRecordCreateDTO dto) {
+        Product product = productRepo.findById(dto.getProductId())
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        Supplier supplier = supplierRepo.findById(dto.getSupplierId())
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+
+        StockRecord record = new StockRecord();
+        record.setQuantity(dto.getQuantity());
+        record.setUnitPrice(dto.getUnitPrice());
+        record.setLastUpdated(dto.getLastUpdated());
+        record.setProduct(product);
+        record.setSupplier(supplier);
+
+        return record;
+    }
+
+    private StockRecordDTO mapEntityToDTO(StockRecord record) {
+        StockRecordDTO dto = new StockRecordDTO();
+        dto.setStockRecordId(record.getStockRecordId());
+        dto.setQuantity(record.getQuantity());
+        dto.setUnitPrice(record.getUnitPrice());
+        dto.setLastUpdated(record.getLastUpdated());
+
+        dto.setProductId(record.getProduct().getProductId());
+        dto.setProductName(record.getProduct().getProductName());
+
+        dto.setSupplierId(record.getSupplier().getSupplierId());
+        dto.setSupplierName(record.getSupplier().getName());
+
+        return dto;
     }
 }

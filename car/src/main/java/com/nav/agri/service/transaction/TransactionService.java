@@ -1,13 +1,15 @@
 package com.nav.agri.service.transaction;
 
-import com.nav.agri.dto.transaction.TransactionCreateDTO;
-import com.nav.agri.dto.transaction.TransactionDTO;
+import com.nav.agri.dto.transaction.TransactionRequestDTO;
+import com.nav.agri.dto.transaction.TransactionResponseDTO;
+
 import java.util.List;
 
 public interface TransactionService {
-    TransactionDTO createTransaction(TransactionCreateDTO dto);
-    TransactionDTO getTransaction(int id);
-    List<TransactionDTO> getAllTransactions();
-    TransactionDTO updateTransaction(int id, TransactionCreateDTO dto);
+    TransactionResponseDTO createTransaction(TransactionRequestDTO request);
+    TransactionResponseDTO getTransaction(int id);
+    List<TransactionResponseDTO> getAllTransactions();
+    // Optional: update if POS allows editing past transactions
+    TransactionResponseDTO updateTransaction(int id, TransactionRequestDTO request);
     void deleteTransaction(int id);
 }

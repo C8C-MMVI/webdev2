@@ -1,16 +1,26 @@
 package com.nav.agri.dto.product;
 
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class ProductCreateDTO {
-    @NotBlank(message = "Product name required")
+
+    @NotBlank(message = "Product name is required")
     private String productName;
+
     private String description;
-    @Min(1)
+
+    @NotNull(message = "Base price is required")
+    @DecimalMin(value = "0.01", message = "Base price must be greater than 0")
     private Double basePrice;
-    @Min(1)
+
+    @NotNull(message = "List price is required")
+    @DecimalMin(value = "0.01", message = "List price must be greater than 0")
     private Double listPrice;
+
+    @Positive(message = "Category ID must be valid")
     private int categoryId;
 
     public String getProductName() {
@@ -52,4 +62,6 @@ public class ProductCreateDTO {
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
+
+    // getters & setters
 }

@@ -26,6 +26,12 @@ public class TransactionDetailsController {
         return repo.findById(id).orElse(null);
     }
 
+    // New endpoint to fetch details by transactionId
+    @GetMapping("/transaction/{transactionId}")
+    public List<TransactionDetails> getByTransactionId(@PathVariable int transactionId) {
+        return repo.findByTransactionTransactionId(transactionId);
+    }
+
     @PostMapping
     public TransactionDetails create(@RequestBody TransactionDetails details) {
         return repo.save(details);

@@ -2,9 +2,12 @@ package com.nav.agri.controllers.api;
 
 import com.nav.agri.models.TransactionDetails;
 import com.nav.agri.repositories.TransactionDetailsRepository;
+import com.nav.agri.dto.transactiondetails.TransactionDetailsDTO;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/transaction-details")
@@ -26,10 +29,27 @@ public class TransactionDetailsController {
         return repo.findById(id).orElse(null);
     }
 
-    // New endpoint to fetch details by transactionId
+    // Existing endpoint
     @GetMapping("/transaction/{transactionId}")
     public List<TransactionDetails> getByTransactionId(@PathVariable int transactionId) {
         return repo.findByTransactionTransactionId(transactionId);
+    }
+
+    // ✅ New DTO-based endpoint
+    @GetMapping("/transaction/{transactionId}/with-product-name")
+    public List<TransactionDetailsDTO> getByTransactionIdWithName(@PathVariable int transactionId) {
+        List<TransactionDetails> details = repo.findByTransactionTransactionId(transactionId);
+        return details.stream()
+                .map(td -> new TransactionDetailsDTO(
+                        td.getTransactionDetailsId(),
+                        td.getQuantity(),
+                        td.getBasePrice(),
+                        td.getListPrice(),
+                        td.getProduct().getProductId(),
+                        td.getProduct().getProductName(), // <-- map product name
+                        td.getTransaction().getTransactionId()
+                ))
+                .collect(Collectors.toList());
     }
 
     @PostMapping

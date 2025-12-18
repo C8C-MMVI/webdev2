@@ -15,7 +15,14 @@ public class StockRecord {
 
     private Double unitPrice;
 
+    @Column(name = "last_updated")
     private LocalDate lastUpdated;
+
+    @PreUpdate
+    @PrePersist
+    public void updateTimestamp() {
+        this.lastUpdated = LocalDate.now();
+    }
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)

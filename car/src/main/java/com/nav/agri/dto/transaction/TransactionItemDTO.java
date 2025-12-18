@@ -23,4 +23,16 @@ public class TransactionItemDTO {
 
     public Double getListPrice() { return listPrice; }
     public void setListPrice(Double listPrice) { this.listPrice = listPrice; }
+
+    @Override
+    public String toString() {
+        return "TransactionItemDTO{" +
+                "productId=" + productId +
+                ", productName='" + productName + '\'' +
+                ", quantity=" + quantity +
+                ", basePrice=" + basePrice +
+                ", listPrice=" + listPrice +
+                '}';
+    }
+
 }

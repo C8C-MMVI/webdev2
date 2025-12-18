@@ -1,14 +1,16 @@
 package com.nav.agri.dto.transaction;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.util.List;
 
 public class TransactionRequestDTO {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") // matches ISO date
     private LocalDate transactionDate;
     private Double totalAmount;
-    private int userId; // who made the transaction
-    private List<TransactionItemDTO> items; // products + quantity + prices
+    private int userId;
+    private List<TransactionItemDTO> items;
 
     // Getters and Setters
     public LocalDate getTransactionDate() { return transactionDate; }
@@ -22,4 +24,14 @@ public class TransactionRequestDTO {
 
     public List<TransactionItemDTO> getItems() { return items; }
     public void setItems(List<TransactionItemDTO> items) { this.items = items; }
+
+    @Override
+    public String toString() {
+        return "TransactionRequestDTO{" +
+                "transactionDate=" + transactionDate +
+                ", totalAmount=" + totalAmount +
+                ", userId=" + userId +
+                ", items=" + items +
+                '}';
+    }
 }

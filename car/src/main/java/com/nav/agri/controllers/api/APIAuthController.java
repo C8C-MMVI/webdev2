@@ -3,6 +3,7 @@ package com.nav.agri.controllers.api;
 import com.nav.agri.dto.AuthRequest;
 import com.nav.agri.dto.AuthResponse;
 import com.nav.agri.dto.RegisterRequest;
+import com.nav.agri.models.User;
 import com.nav.agri.service.JwtTokenService;
 import com.nav.agri.service.UserService;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class APIAuthController {
+
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
     private final UserService userService;
@@ -38,7 +40,14 @@ public class APIAuthController {
         String token = jwtTokenService.generateToken(authentication);
         Long expiresAt = jwtTokenService.extractExpirationTime(token);
 
-        return new AuthResponse(token, authentication.getName(), expiresAt);
+        User user = userService.getUserByUsername(authentication.getName());
+
+        // ADD THIS
+        System.out.println("🔍 User object: " + user);
+        System.out.println("🔍 User ID: " + user.getId());
+        System.out.println("🔍 User username: " + user.getUsername());
+
+        return new AuthResponse(token, user.getUsername(), user.getId(), expiresAt);
     }
 
     @PostMapping("/register")
@@ -55,7 +64,9 @@ public class APIAuthController {
         String token = jwtTokenService.generateToken(authentication);
         Long expiresAt = jwtTokenService.extractExpirationTime(token);
 
-        return new AuthResponse(token, request.username(), expiresAt);
+        User user = userService.getUserByUsername(request.username());
+
+        return new AuthResponse(token, user.getUsername(), user.getId(), expiresAt);
     }
 
     @GetMapping("/validate")
